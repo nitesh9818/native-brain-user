@@ -18,12 +18,18 @@ public class User extends SqlBaseEntity{
 
     private String mobileNo;
 
+    @Transient
+    private String parentMobileNo;
+
     private String gender;
 
     private String dateOfBirth;
 
     @OneToOne(mappedBy = "user")
     private PersonalInfo personalInfo;
+
+    @ManyToOne
+    private Family family;
 
     @ManyToMany(cascade = {
             CascadeType.MERGE
