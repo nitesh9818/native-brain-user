@@ -1,14 +1,19 @@
 package co.tvisory.api.user.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Setter @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Family extends SqlBaseEntity {
 
     private String parentMobileNo;

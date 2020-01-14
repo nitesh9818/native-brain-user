@@ -1,6 +1,8 @@
 package co.tvisory.api.user.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,6 +12,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Setter @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 public class SqlBaseEntity implements Serializable {
 
