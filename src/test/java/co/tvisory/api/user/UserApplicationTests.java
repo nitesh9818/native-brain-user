@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ContextConfiguration
 @SpringBootTest
 @SpringBootConfiguration
-class UserApplicationTests {
+public class UserApplicationTests {
 
 	public UserApplicationTests(){
 	}
