@@ -25,10 +25,11 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 		
 		additionalInfo.put("name", user.getName());
 		additionalInfo.put("email", user.getEmail());
-		additionalInfo.put("id", user.getId());
-		additionalInfo.put("username", user.getUsername());
+		additionalInfo.put("userId", user.getUserId());
+		additionalInfo.put("securityId", user.getSecurityId());
 		additionalInfo.put("lastLogin", user.getLastLogin());
-		((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(additionalInfo);;
+		additionalInfo.put("roles", roles);
+		((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(additionalInfo);
 		return accessToken;
 	}
 

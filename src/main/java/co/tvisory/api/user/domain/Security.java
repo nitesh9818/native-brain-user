@@ -17,14 +17,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Security extends SqlBaseEntity{
 
-    @OneToOne
+    @OneToOne(mappedBy = "security", cascade = {CascadeType.ALL})
     private User user;
 
-    private String username;
+    private String name;
+
+    private String email;
+
+    private String mobileNo;
 
     private String password;
     
     private Date lastLogin;
+
+    @ManyToMany(cascade = {
+            CascadeType.MERGE
+    }, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "security_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     public Security(Long version) {
         super(version);

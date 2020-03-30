@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,9 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class User extends SqlBaseEntity{
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String firstName;
@@ -27,33 +25,15 @@ public class User extends SqlBaseEntity{
 
     private String mobileNo;
 
-    @Transient
-    private String parentMobileNo;
-
     private String gender;
 
     private String dateOfBirth;
 
-    @OneToOne(mappedBy = "user")
-    private PersonalInfo personalInfo;
-
-    @ManyToOne
-    private Family family;
-
-    @ManyToMany(cascade = {
-            CascadeType.MERGE
-    }, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @OneToMany(mappedBy = "user")
+    private List<Qualification> qualifications;
     
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL})
+    @OneToOne
     private Security security;
-
-    @Transient
-    private String username;
-    
-    @Transient
-    private String password;
     
     public User(Long version) {
         super(version);

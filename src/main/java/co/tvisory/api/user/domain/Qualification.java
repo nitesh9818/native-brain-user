@@ -8,18 +8,31 @@ import lombok.Setter;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
 @Setter @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonalInfo extends SqlBaseEntity{
+public class Qualification extends SqlBaseEntity{
 
-    @OneToOne
+    @ManyToOne
     private User user;
 
-    public PersonalInfo(Long version) {
+    private String qualificationName;
+
+    private String schoolOrCollege;
+
+    private String board;
+
+    private Double percent;
+
+    private Long passingYear;
+
+    private String description;
+
+    public Qualification(Long version) {
         super(version);
     }
 }

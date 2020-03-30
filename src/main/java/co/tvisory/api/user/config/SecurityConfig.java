@@ -25,19 +25,13 @@ import co.tvisory.api.user.security.AppUserDetailService;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Value("${oauth.security.jwt.realmName}")
-	private String realmName;
-	
-	@Value("${oauth.security.jwt.signingKey}")
-	private String signingKey;
-	
-	@Value("${spring.data.rest.base-path}")
-    private String baseUrl;
+	private EnvConfig envConfig;
     
     private AppUserDetailService userDetailService;
 
-    public SecurityConfig(AppUserDetailService userDetailService) {
+    public SecurityConfig(AppUserDetailService userDetailService, EnvConfig envConfig) {
         this.userDetailService = userDetailService;
+        this.envConfig = envConfig;
     }
     
     @Bean
@@ -60,14 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/actuator/**");
+        web.ignoring().antMatchers(HttpMethod.POST,"/api/v1/security");
         web.ignoring().antMatchers(HttpMethod.OPTIONS);
-        web.ignoring().antMatchers(HttpMethod.POST);
-        web.ignoring().antMatchers(HttpMethod.GET);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	
         http
         	.cors()
         	.and()
@@ -75,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .httpBasic()
-            .realmName(realmName)
+            .realmName(envConfig.getSecurityRealm())
             .and()
             .csrf()
             .disable();
@@ -84,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		converter.setSigningKey(signingKey);
+		converter.setSigningKey(envConfig.getSigningKey());
 		return converter;
 	}
     

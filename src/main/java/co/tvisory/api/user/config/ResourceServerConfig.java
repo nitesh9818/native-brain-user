@@ -12,23 +12,20 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
-	
-	@Value("${oauth.security.jwt.resourceId}")
-    private String resourceId;
-	
-	@Value("${spring.data.rest.base-path}")
-    private String baseUrl;
+
+	private EnvConfig envConfig;
 	
 	private ResourceServerTokenServices tokenServices;
 	
 	@Autowired
-	public ResourceServerConfig(ResourceServerTokenServices tokenServices) {
+	public ResourceServerConfig(ResourceServerTokenServices tokenServices, EnvConfig envConfig) {
 		this.tokenServices = tokenServices;
+		this.envConfig = envConfig;
 	}
 	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.resourceId(resourceId).tokenServices(tokenServices);
+		resources.resourceId(envConfig.getResourceIds()).tokenServices(tokenServices);
 	}
 	
 	@Override
@@ -36,7 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		http.cors()
 			.and()
 			.authorizeRequests()
-			.antMatchers(baseUrl + "/**")
+			.antMatchers(envConfig.getBaseUrl() + "/**")
 			.fullyAuthenticated();
 	}
 	

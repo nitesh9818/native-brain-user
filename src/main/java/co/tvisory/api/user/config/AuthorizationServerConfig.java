@@ -24,17 +24,7 @@ import co.tvisory.api.user.security.CustomTokenEnhancer;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 	
-	@Value("${oauth.security.jwt.clientId}")
-	private String clientId;
-	
-	@Value("${oauth.security.jwt.resourceId}")
-	private String resourceId;
-	
-	@Value("${oauth.security.jwt.secret}")
-	private String secret;
-	
-	@Value("${oauth.security.jwt.grantType}")
-	private String grantType;
+	private EnvConfig envConfig;
 	
 	private TokenStore tokenStore;
 	
@@ -44,11 +34,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	private AuthenticationManager authenticationManager;
 	
-	public AuthorizationServerConfig(JwtAccessTokenConverter converter, TokenStore tokenStore, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
-		this.accessTokenConverter = converter;
+	public AuthorizationServerConfig(JwtAccessTokenConverter accessTokenConverter, TokenStore tokenStore,
+									 BCryptPasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+									 EnvConfig envConfig) {
+		this.accessTokenConverter = accessTokenConverter;
 		this.authenticationManager = authenticationManager;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenStore = tokenStore;
+		this.envConfig = envConfig;
 	}
 
 	@Override
@@ -56,11 +49,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		
 		clients
 			.inMemory()
-			.withClient(clientId)
-			.secret(passwordEncoder.encode(secret))
-			.authorizedGrantTypes(grantType)
-			.resourceIds(resourceId)
+			.withClient(envConfig.getClientId())
+			.secret(passwordEncoder.encode(envConfig.getClientSecret()))
+			.authorizedGrantTypes(envConfig.getGrantType())
 			.scopes("read", "write")
+			.resourceIds(envConfig.getResourceIds())
 			.accessTokenValiditySeconds(3600);
 		
 	}

@@ -24,19 +24,23 @@ public class AppUserDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Security> security = securityRepository.findByUsername(username);
+		Optional<Security> security = securityRepository.findByEmailOrMobileNo(username, username);
 		if (!security.isPresent()) {
-			throw new UsernameNotFoundException("user not found.");
+			throw new UsernameNotFoundException("user not found");
 		}
 		
 		co.tvisory.api.user.domain.User user = security.get().getUser();
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-		user.getRoles().forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole())));
+		security.get().getRoles().forEach(role -> grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole())));
 		
-		User userDetails = new User(security.get().getUsername(), security.get().getPassword(), grantedAuthorities);
-		userDetails.setId(user.getId());
-		userDetails.setName(user.getFirstName()+" "+user.getLastName());
-		userDetails.setEmail(user.getEmail());
+		User userDetails = new User(security.get().getEmail(), security.get().getPassword(), grantedAuthorities);
+		if (Optional.ofNullable(user).isPresent()){
+			userDetails.setUserId(user.getId());
+		}else {
+			userDetails.setSecurityId(security.get().getId());
+		}
+		userDetails.setName(security.get().getName());
+		userDetails.setEmail(security.get().getEmail());
 		userDetails.setLastLogin(security.get().getLastLogin());
 		return userDetails;
 	}

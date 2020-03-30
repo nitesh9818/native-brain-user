@@ -11,7 +11,9 @@ import lombok.Setter;
 @Setter @Getter
 public class User extends org.springframework.security.core.userdetails.User {
 
-	private Long id;
+	private Long userId;
+
+	private Long securityId;
 	
 	private String name;
 	
