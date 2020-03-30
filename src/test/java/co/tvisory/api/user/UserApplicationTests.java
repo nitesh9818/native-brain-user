@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 class UserApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
 
 }
